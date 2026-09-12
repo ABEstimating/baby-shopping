@@ -6,21 +6,27 @@
   <meta name="theme-color" content="#fbfaf7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Baby Shop">
+  <meta name="apple-mobile-web-app-title" content="WLA Baby">
+  <meta name="application-name" content="WLA Baby">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="shortcut icon" href="icon.svg">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
-  <title>Baby Shop</title>
+  <title>WLA Baby</title>
 </head>
 <body>
   <div id="app" class="app-shell">
     <header class="topbar">
-      <div>
-        <p class="eyebrow">BABY SHOP</p>
-        <h1 id="pageTitle">Categories</h1>
+      <div class="brand-wrap">
+        <img src="icon.svg" class="brand-logo" alt="WLA Baby">
+        <div class="brand-copy">
+          <p class="eyebrow">WLA BABY</p>
+          <h1 id="pageTitle">Categories</h1>
+        </div>
       </div>
       <div class="top-actions">
-        <button id="installBtn" class="icon-btn install-btn" aria-label="Add to Home Screen">＋</button>
+        <button id="installBtn" class="icon-btn install-btn" aria-label="Add WLA Baby to Home Screen">＋</button>
         <button id="searchBtn" class="icon-btn" aria-label="Search">⌕</button>
       </div>
     </header>
@@ -56,13 +62,13 @@
   <div id="installSheet" class="sheet-backdrop hidden">
     <section class="sheet install-sheet">
       <div class="sheet-handle"></div>
-      <div class="sheet-head"><h2>Add Baby Shop to iPhone</h2><button class="close-sheet">×</button></div>
-      <div class="install-icon">↥</div>
+      <div class="sheet-head"><h2>Add WLA Baby to iPhone</h2><button class="close-sheet">×</button></div>
+      <img src="icon.svg" class="install-brand-icon" alt="WLA Baby icon">
       <ol class="install-steps">
         <li>Open this site in <strong>Safari</strong>.</li>
         <li>Tap the <strong>Share</strong> button <span class="share-symbol">↥</span>.</li>
         <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
-        <li>Tap <strong>Add</strong>. It will open like an app.</li>
+        <li>Tap <strong>Add</strong>. The WLA Baby icon will appear on your Home Screen.</li>
       </ol>
       <button id="copyUrlBtn" class="primary-btn">Copy Website Link</button>
       <p id="installNote" class="fine-print"></p>
