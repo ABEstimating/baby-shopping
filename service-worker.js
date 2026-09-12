@@ -1,5 +1,6 @@
-const CACHE='baby-shopping-v8';
-const ASSETS=['./','index.html','modern.css','modern.js','manifest.json','icon.svg','wla-family-hero.jpg'];
+const CACHE='baby-shopping-v9';
+const HERO_PARTS=Array.from({length:13},(_,i)=>`hero-q20/part${i}.txt`);
+const ASSETS=['./','index.html','modern.css','modern.js','hero-loader.js','manifest.json','icon.svg','wla-family-hero.jpg',...HERO_PARTS];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return res}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))))});
