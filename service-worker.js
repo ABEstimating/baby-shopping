@@ -1,4 +1,4 @@
-const CACHE='baby-shopping-v9';
+const CACHE='baby-shopping-v10';
 const HERO_PARTS=Array.from({length:13},(_,i)=>`hero-q20/part${i}.txt`);
 const ASSETS=['./','index.html','modern.css','modern.js','hero-loader.js','manifest.json','icon.svg','wla-family-hero.jpg',...HERO_PARTS];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
