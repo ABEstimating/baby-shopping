@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5f4ef">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Baby List">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Baby Shopping</title>
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">BABY SHOPPING</p>
+    <h1>Everything we need.</h1>
+    <p class="sub">Health-conscious picks, quantities, and progress.</p>
+    <div class="progress-card">
+      <div class="progress-top"><strong id="progressText">0% complete</strong><span id="countText">0 / 0 items</span></div>
+      <div class="bar"><div id="barFill"></div></div>
+    </div>
+  </header>
+  <main>
+    <section class="controls">
+      <input id="search" type="search" placeholder="Search baby items…">
+      <div class="chips" id="chips"></div>
+      <label class="toggle"><input id="remainingOnly" type="checkbox"><span>Show remaining only</span></label>
+    </section>
+    <section id="list" class="list"></section>
+  </main>
+  <template id="cardTemplate">
+    <article class="card">
+      <div class="card-main">
+        <button class="check" aria-label="Mark purchased"></button>
+        <div class="item-copy">
+          <div class="item-head"><span class="priority"></span><h2 class="name"></h2></div>
+          <p class="note"></p>
+          <div class="qty-row"><span>Need <strong class="need"></strong></span><label>Purchased <select class="qty"></select></label></div>
+        </div>
+        <button class="expand" aria-label="Show product choices">⌄</button>
+      </div>
+      <div class="details"><p class="pick-label">Recommended options</p><div class="products"></div></div>
+    </article>
+  </template>
+  <footer><button id="reset">Reset progress</button><p>Progress is saved on this device.</p></footer>
+  <script src="app.js"></script>
+</body>
+</html>
