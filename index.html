@@ -1,83 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-  <meta name="theme-color" content="#fbfaf7">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="WLA Baby">
-  <meta name="application-name" content="WLA Baby">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/svg+xml" href="icon.svg">
-  <link rel="shortcut icon" href="icon.svg">
-  <link rel="apple-touch-icon" href="icon.svg">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="brand.css">
-  <title>WLA Baby</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f7f5ef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WLA Baby">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="modern.css">
+<title>WLA Baby</title>
 </head>
 <body>
-  <div id="app" class="app-shell">
-    <header class="topbar">
-      <div class="brand-wrap">
-        <img src="icon.svg" class="brand-logo" alt="WLA Baby">
-        <div class="brand-copy">
-          <p class="eyebrow">WLA BABY</p>
-          <h1 id="pageTitle">Categories</h1>
-        </div>
-      </div>
-      <div class="top-actions">
-        <button id="installBtn" class="icon-btn install-btn" aria-label="Add WLA Baby to Home Screen">＋</button>
-        <button id="searchBtn" class="icon-btn" aria-label="Search">⌕</button>
-      </div>
-    </header>
-
-    <main id="view" class="view"></main>
-
-    <nav class="bottom-nav" aria-label="App navigation">
-      <button data-tab="home" class="nav-btn active"><span>⌂</span><small>Home</small></button>
-      <button data-tab="categories" class="nav-btn"><span>▦</span><small>Categories</small></button>
-      <button data-tab="checklist" class="nav-btn"><span>✓</span><small>Checklist</small></button>
-      <button data-tab="saved" class="nav-btn"><span>♡</span><small>Saved</small></button>
-      <button data-tab="more" class="nav-btn"><span>•••</span><small>More</small></button>
-    </nav>
-  </div>
-
-  <div id="searchSheet" class="sheet-backdrop hidden">
-    <section class="sheet search-sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-head"><h2>Search products</h2><button class="close-sheet">×</button></div>
-      <input id="globalSearch" class="search-input" type="search" placeholder="Search crib, bottles, diapers…" autocomplete="off">
-      <div id="searchResults" class="search-results"></div>
-    </section>
-  </div>
-
-  <div id="detailSheet" class="sheet-backdrop hidden">
-    <section class="sheet detail-sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-head"><button id="detailBack" class="text-btn">‹ Back</button><button id="detailSave" class="heart-btn">♡</button></div>
-      <div id="detailContent"></div>
-    </section>
-  </div>
-
-  <div id="installSheet" class="sheet-backdrop hidden">
-    <section class="sheet install-sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-head"><h2>Add WLA Baby to iPhone</h2><button class="close-sheet">×</button></div>
-      <img src="icon.svg" class="install-brand-icon" alt="WLA Baby icon">
-      <ol class="install-steps">
-        <li>Open this site in <strong>Safari</strong>.</li>
-        <li>Tap the <strong>Share</strong> button <span class="share-symbol">↥</span>.</li>
-        <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
-        <li>Tap <strong>Add</strong>. The WLA Baby icon will appear on your Home Screen.</li>
-      </ol>
-      <button id="copyUrlBtn" class="primary-btn">Copy Website Link</button>
-      <p id="installNote" class="fine-print"></p>
-    </section>
-  </div>
-
-  <script src="app.js"></script>
-  <script src="link-fix.js"></script>
-  <script src="enhance.js"></script>
+<section class="hero" aria-label="WLA Baby welcome">
+  <img src="wla-family-hero.jpg" alt="WLA Baby family cover">
+  <button id="scrollCue" class="scroll-cue" type="button" aria-label="Scroll to shop"><span>⌃</span>Scroll up</button>
+</section>
+<section id="shop" class="shop">
+  <header class="shop-head">
+    <div class="logo-wrap"><img src="icon.svg" alt="WLA Baby"></div>
+    <label class="search-row"><span>⌕</span><input id="search" type="search" placeholder="Search products" autocomplete="off"></label>
+    <div id="categories" class="categories" aria-label="Product categories"></div>
+  </header>
+  <main class="results">
+    <div class="results-head"><h2>Top picks</h2><small id="resultCount"></small></div>
+    <div id="grid" class="grid"></div>
+  </main>
+  <footer class="install">WLA Baby • prices are snapshots • tap Amazon for current price and delivery</footer>
+</section>
+<script src="modern.js"></script>
 </body>
 </html>
