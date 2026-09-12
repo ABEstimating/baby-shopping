@@ -1,10 +1,12 @@
 {
-  "name": "Baby Shopping Checklist",
-  "short_name": "Baby List",
+  "name": "WLA Baby",
+  "short_name": "WLA Baby",
+  "description": "Curated baby shopping, checklist, and product guide.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f5f4ef",
-  "theme_color": "#f5f4ef",
+  "background_color": "#fbfaf7",
+  "theme_color": "#fbfaf7",
   "icons": [
     {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
