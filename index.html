@@ -15,7 +15,7 @@
 </head>
 <body>
 <section class="hero" aria-label="WLA Baby welcome">
-  <img src="wla-family-hero.jpg" alt="WLA Baby family cover">
+  <img src="wla-family-hero.jpg?v=fallback2" alt="WLA Baby family cover" loading="eager" fetchpriority="high" decoding="async">
   <button id="scrollCue" class="scroll-cue" type="button" aria-label="Scroll to shop"><span>⌃</span>Scroll up</button>
 </section>
 <section id="shop" class="shop">
@@ -30,6 +30,7 @@
   </main>
   <footer class="install">WLA Baby • prices are snapshots • tap Amazon for current price and delivery</footer>
 </section>
+<script src="hero-loader.js?v=hd1"></script>
 <script src="modern.js"></script>
 </body>
 </html>
