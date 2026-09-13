@@ -1,0 +1,9 @@
+{
+  "name": "personal-checklist",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "pg": "^8.13.1",
+    "web-push": "^3.6.7"
+  }
+}
