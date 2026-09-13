@@ -1,14 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WLA Baby logo">
-  <rect width="512" height="512" rx="112" fill="#F7F4EC"/>
-  <circle cx="166" cy="132" r="48" fill="#D8B98F" stroke="#596B5B" stroke-width="12"/>
-  <circle cx="346" cy="132" r="48" fill="#D8B98F" stroke="#596B5B" stroke-width="12"/>
-  <circle cx="256" cy="210" r="126" fill="#D8B98F" stroke="#596B5B" stroke-width="14"/>
-  <ellipse cx="256" cy="236" rx="74" ry="52" fill="#F7F4EC"/>
-  <circle cx="218" cy="198" r="10" fill="#343A34"/>
-  <circle cx="294" cy="198" r="10" fill="#343A34"/>
-  <ellipse cx="256" cy="230" rx="12" ry="10" fill="#343A34"/>
-  <path d="M256 240c-8 16-24 22-38 16M256 240c8 16 24 22 38 16" fill="none" stroke="#343A34" stroke-width="7" stroke-linecap="round"/>
-  <path d="M132 317c-35 5-61 27-72 61 37-10 64-4 83 14M380 317c35 5 61 27 72 61-37-10-64-4-83 14" fill="none" stroke="#7B927C" stroke-width="10" stroke-linecap="round"/>
-  <text x="256" y="410" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="92" font-weight="700" letter-spacing="8" fill="#596B5B">WLA</text>
-  <text x="256" y="456" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="9" fill="#343A34">BABY</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Checklist icon">
+  <rect width="512" height="512" rx="112" fill="#111827"/>
+  <rect x="112" y="86" width="288" height="340" rx="44" fill="#F9FAFB"/>
+  <rect x="184" y="58" width="144" height="64" rx="26" fill="#D1D5DB"/>
+  <path d="M166 190l24 24 46-52" fill="none" stroke="#111827" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M166 278l24 24 46-52" fill="none" stroke="#111827" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M166 366l24 24 46-52" fill="none" stroke="#111827" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M266 192h78M266 280h78M266 368h78" fill="none" stroke="#6B7280" stroke-width="16" stroke-linecap="round"/>
 </svg>
