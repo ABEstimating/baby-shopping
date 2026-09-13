@@ -7,33 +7,30 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Checklist">
-<link rel="manifest" href="manifest.json?v=20260913-2">
-<link rel="icon" type="image/svg+xml" href="icon.svg?v=20260913-2">
-<link rel="apple-touch-icon" href="icon.svg?v=20260913-2">
-<link rel="stylesheet" href="modern.css?v=20260913-2">
+<link rel="manifest" href="manifest.json?v=20260913-3">
+<link rel="icon" type="image/svg+xml" href="icon.svg?v=20260913-3">
+<link rel="apple-touch-icon" href="icon.svg?v=20260913-3">
+<link rel="stylesheet" href="modern.css?v=20260913-3">
 <title>My Checklist</title>
-<script>
-if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});}
-if('caches' in window){caches.keys().then(keys=>Promise.all(keys.map(k=>caches.delete(k)))).catch(()=>{});}
-</script>
 </head>
 <body>
 <div class="app-shell">
   <header class="topbar">
     <div class="brand">
-      <img src="icon.svg?v=20260913-2" alt="Checklist icon">
+      <img src="icon.svg?v=20260913-3" alt="Checklist icon">
       <div><h1>My Checklist</h1><p id="summary">0 items left</p></div>
     </div>
-    <button id="archiveBtn" class="secondary" type="button">Show Archive</button>
+    <div class="header-actions">
+      <button id="notifyBtn" class="secondary" type="button">Enable Alerts</button>
+      <button id="archiveBtn" class="secondary" type="button">Archive</button>
+    </div>
   </header>
 
+  <div id="notice" class="notice hidden"></div>
   <nav id="timeTabs" class="tabs" aria-label="Time period"></nav>
 
   <main>
-    <section id="activeView">
-      <div id="groups" class="groups"></div>
-    </section>
-
+    <section id="activeView"><div id="groups" class="groups"></div></section>
     <section id="archiveView" class="hidden">
       <div class="section-heading">
         <div><h2>Completed</h2><p>Finished items stay here until you restore or clear them.</p></div>
@@ -42,7 +39,6 @@ if('caches' in window){caches.keys().then(keys=>Promise.all(keys.map(k=>caches.d
       <div id="archiveList" class="archive-list"></div>
     </section>
   </main>
-
   <button id="addFab" class="fab" type="button" aria-label="Add checklist item">+</button>
 </div>
 
@@ -52,10 +48,12 @@ if('caches' in window){caches.keys().then(keys=>Promise.all(keys.map(k=>caches.d
     <label>Item<input id="taskInput" type="text" placeholder="What needs to get done?"></label>
     <label>When<select id="periodInput"><option>Today</option><option>This Week</option><option>This Month</option><option>This Year</option></select></label>
     <label>Category<input id="categoryInput" type="text" placeholder="e.g. Pets, Housework"></label>
+    <label>Reminder<input id="reminderInput" type="datetime-local"></label>
+    <p class="field-help">Optional. Notifications work after alerts are enabled on the installed iPhone app.</p>
     <button id="saveTask" class="primary" type="button">Add to Checklist</button>
   </div>
 </div>
 
-<script src="modern.js?v=20260913-2"></script>
+<script src="modern.js?v=20260913-3"></script>
 </body>
 </html>
