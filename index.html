@@ -2,35 +2,56 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#f7f5ef">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="WLA Baby">
+<meta name="apple-mobile-web-app-title" content="Checklist">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="modern.css">
-<title>WLA Baby</title>
+<title>My Checklist</title>
 </head>
 <body>
-<section class="hero" aria-label="WLA Baby welcome">
-  <img src="wla-family-hero.jpg?v=fallback2" alt="WLA Baby family cover" loading="eager" fetchpriority="high" decoding="async">
-  <button id="scrollCue" class="scroll-cue" type="button" aria-label="Scroll to shop"><span>⌃</span>Scroll up</button>
-</section>
-<section id="shop" class="shop">
-  <header class="shop-head">
-    <div class="logo-wrap"><img src="icon.svg" alt="WLA Baby"></div>
-    <label class="search-row"><span>⌕</span><input id="search" type="search" placeholder="Search products" autocomplete="off"></label>
-    <div id="categories" class="categories" aria-label="Product categories"></div>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <img src="icon.svg" alt="Checklist icon">
+      <div><h1>My Checklist</h1><p id="summary">0 items left</p></div>
+    </div>
+    <button id="archiveBtn" class="secondary" type="button">Show Archive</button>
   </header>
-  <main class="results">
-    <div class="results-head"><h2>Top picks</h2><small id="resultCount"></small></div>
-    <div id="grid" class="grid"></div>
+
+  <nav id="timeTabs" class="tabs" aria-label="Time period"></nav>
+
+  <main>
+    <section id="activeView">
+      <div id="groups" class="groups"></div>
+    </section>
+
+    <section id="archiveView" class="hidden">
+      <div class="section-heading">
+        <div><h2>Completed</h2><p>Finished items stay here until you restore or clear them.</p></div>
+        <button id="clearArchive" class="danger-link" type="button">Clear Archive</button>
+      </div>
+      <div id="archiveList" class="archive-list"></div>
+    </section>
   </main>
-  <footer class="install">WLA Baby • prices are snapshots • tap Amazon for current price and delivery</footer>
-</section>
-<script src="hero-loader.js?v=hd1"></script>
+
+  <button id="addFab" class="fab" type="button" aria-label="Add checklist item">+</button>
+</div>
+
+<div id="addModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+  <div class="modal-card">
+    <div class="modal-head"><h2 id="addTitle">Add Item</h2><button id="closeModal" type="button" aria-label="Close">×</button></div>
+    <label>Item<input id="taskInput" type="text" placeholder="What needs to get done?"></label>
+    <label>When<select id="periodInput"><option>Today</option><option>This Week</option><option>This Month</option><option>This Year</option></select></label>
+    <label>Category<input id="categoryInput" type="text" placeholder="e.g. Pets, Housework"></label>
+    <button id="saveTask" class="primary" type="button">Add to Checklist</button>
+  </div>
+</div>
+
 <script src="modern.js"></script>
 </body>
 </html>
