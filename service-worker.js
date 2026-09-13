@@ -1,5 +1,7 @@
-const CACHE='personal-checklist-v1';
+const CACHE='personal-checklist-v3';
 const ASSETS=['./','index.html','modern.css','modern.js','manifest.json','icon.svg'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))])));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return res}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./'))))});
+self.addEventListener('push',event=>{let data={};try{data=event.data?event.data.json():{}}catch(e){data={body:event.data?event.data.text():'Checklist reminder'}}const title=data.title||'My Checklist';const options={body:data.body||'You have a checklist reminder.',icon:'icon.svg',badge:'icon.svg',tag:data.tag||'checklist-reminder',data:{url:data.url||'./'},renotify:true};event.waitUntil(self.registration.showNotification(title,options))});
+self.addEventListener('notificationclick',event=>{event.notification.close();const target=new URL(event.notification.data?.url||'./',self.location.origin).href;event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{for(const client of list){if(client.url.startsWith(self.location.origin)&&'focus'in client){client.navigate(target);return client.focus()}}return clients.openWindow?clients.openWindow(target):null}))});
