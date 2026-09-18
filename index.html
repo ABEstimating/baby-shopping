@@ -2,25 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Checklist">
-<link rel="manifest" href="manifest.json?v=20260913-3">
-<link rel="icon" type="image/svg+xml" href="icon.svg?v=20260913-3">
-<link rel="apple-touch-icon" href="icon.svg?v=20260913-3">
-<link rel="stylesheet" href="modern.css?v=20260913-3">
+<link rel="manifest" href="manifest.json?v=20260918-1">
+<link rel="icon" type="image/svg+xml" href="icon.svg?v=20260918-1">
+<link rel="apple-touch-icon" href="icon.svg?v=20260918-1">
+<link rel="stylesheet" href="modern.css?v=20260918-1">
 <title>My Checklist</title>
 </head>
 <body>
 <div class="app-shell">
   <header class="topbar">
     <div class="brand">
-      <img src="icon.svg?v=20260913-3" alt="Checklist icon">
+      <img src="icon.svg?v=20260918-1" alt="Checklist icon">
       <div><h1>My Checklist</h1><p id="summary">0 items left</p></div>
     </div>
     <div class="header-actions">
+      <button id="addCategoryBtn" class="secondary" type="button">+ Category</button>
       <button id="notifyBtn" class="secondary" type="button">Enable Alerts</button>
       <button id="archiveBtn" class="secondary" type="button">Archive</button>
     </div>
@@ -39,7 +40,6 @@
       <div id="archiveList" class="archive-list"></div>
     </section>
   </main>
-  <button id="addFab" class="fab" type="button" aria-label="Add checklist item">+</button>
 </div>
 
 <div id="addModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="addTitle">
@@ -54,6 +54,6 @@
   </div>
 </div>
 
-<script src="modern.js?v=20260913-3"></script>
+<script src="modern.js?v=20260918-1"></script>
 </body>
 </html>
