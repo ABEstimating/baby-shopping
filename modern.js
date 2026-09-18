@@ -34,7 +34,7 @@ function render(){renderTabs();renderActive();renderArchive();updateSummary();ac
 
 archiveBtn.onclick=()=>{showingArchive=!showingArchive;render()};
 $('clearArchive').onclick=()=>{if(tasks.some(t=>t.done)&&confirm('Permanently clear all completed items?')){tasks=tasks.filter(t=>!t.done);save();render()}};
-$('addFab').onclick=()=>{periodInput.value=activePeriod;categoryInput.value='';taskInput.value='';reminderInput.value='';modal.classList.remove('hidden');setTimeout(()=>taskInput.focus(),50)};
+const legacyFab=$('addFab');if(legacyFab)legacyFab.onclick=()=>{periodInput.value=activePeriod;categoryInput.value='';taskInput.value='';reminderInput.value='';modal.classList.remove('hidden');setTimeout(()=>taskInput.focus(),50)};
 $('closeModal').onclick=()=>modal.classList.add('hidden');modal.onclick=e=>{if(e.target===modal)modal.classList.add('hidden')};$('saveTask').onclick=addTask;taskInput.onkeydown=e=>{if(e.key==='Enter')addTask()};
 async function addTask(){const text=taskInput.value.trim();if(!text){taskInput.focus();return}const task={id:newId(),period:periodInput.value,category:categoryInput.value.trim()||'Other',text,done:false};if(reminderInput.value)task.remindAt=new Date(reminderInput.value).toISOString();tasks.push(task);activePeriod=task.period;save();modal.classList.add('hidden');render();if(task.remindAt){try{if(Notification.permission!=='granted')await enableNotifications();await api('/api/reminders',{method:'POST',body:JSON.stringify({deviceId:deviceId(),taskId:task.id,text:task.text,category:task.category,remindAt:task.remindAt})});showNotice(`Reminder set for ${fmtReminder(task.remindAt)}.`)}catch(e){showNotice(`Task saved, but the reminder is not active yet: ${e.message}`)}}}
 
@@ -43,7 +43,7 @@ async function enableNotifications(){if(!('serviceWorker'in navigator)||!('PushM
 function updateNotificationButton(){if(!('Notification'in window)){notifyBtn.textContent='Alerts Unavailable';return}notifyBtn.textContent=Notification.permission==='granted'?'Alerts On':'Enable Alerts'}
 notifyBtn.onclick=()=>enableNotifications().catch(e=>showNotice(e.message));
 
-if('serviceWorker'in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('service-worker.js?v=20260918-1');updateNotificationButton()}catch(e){showNotice('Could not start notifications on this device.')}})}
+if('serviceWorker'in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('service-worker.js?v=20260918-2');updateNotificationButton()}catch(e){showNotice('Could not start notifications on this device.')}})}
 render();
 // Checklist category, color, editing and multi-reminder enhancements.
 (function(){
