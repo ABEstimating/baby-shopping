@@ -43,7 +43,7 @@ async function enableNotifications(){if(!('serviceWorker'in navigator)||!('PushM
 function updateNotificationButton(){if(!('Notification'in window)){notifyBtn.textContent='Alerts Unavailable';return}notifyBtn.textContent=Notification.permission==='granted'?'Alerts On':'Enable Alerts'}
 notifyBtn.onclick=()=>enableNotifications().catch(e=>showNotice(e.message));
 
-if('serviceWorker'in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('service-worker.js?v=20260913-3');updateNotificationButton()}catch(e){showNotice('Could not start notifications on this device.')}})}
+if('serviceWorker'in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('service-worker.js?v=20260918-1');updateNotificationButton()}catch(e){showNotice('Could not start notifications on this device.')}})}
 render();
 // Checklist category, color, editing and multi-reminder enhancements.
 (function(){
