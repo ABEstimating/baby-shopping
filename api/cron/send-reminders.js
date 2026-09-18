@@ -8,11 +8,11 @@ module.exports=async function handler(req,res){
     if(!pub||!priv)return res.status(503).json({error:'VAPID keys not configured'});
     webpush.setVapidDetails(subject,pub,priv);
     const db=await init();
-    const {rows}=await db.query(`SELECT r.id,r.device_id,r.task_id,r.text,r.category,s.subscription FROM reminders r JOIN push_subscriptions s ON s.device_id=r.device_id WHERE r.sent_at IS NULL AND r.remind_at<=NOW() ORDER BY r.remind_at ASC LIMIT 100`);
+    const {rows}=await db.query(`SELECT r.id,r.device_id,r.task_id,r.reminder_key,r.text,r.category,s.subscription FROM reminders r JOIN push_subscriptions s ON s.device_id=r.device_id WHERE r.sent_at IS NULL AND r.remind_at<=NOW() ORDER BY r.remind_at ASC LIMIT 100`);
     let sent=0,failed=0;
     for(const row of rows){
       try{
-        await webpush.sendNotification(row.subscription,JSON.stringify({title:'My Checklist',body:row.text,tag:`task-${row.task_id}`,url:'./'}));
+        await webpush.sendNotification(row.subscription,JSON.stringify({title:'My Checklist',body:row.text,tag:`task-${row.task_id}-${row.reminder_key||row.id}`,url:'./'}));
         await db.query('UPDATE reminders SET sent_at=NOW() WHERE id=$1',[row.id]);sent++;
       }catch(e){failed++;if(e.statusCode===404||e.statusCode===410){await db.query('DELETE FROM push_subscriptions WHERE device_id=$1',[row.device_id]);await db.query('DELETE FROM reminders WHERE device_id=$1',[row.device_id]);}}
     }
