@@ -43,7 +43,7 @@ async function enableNotifications(){if(!('serviceWorker'in navigator)||!('PushM
 function updateNotificationButton(){if(!('Notification'in window)){notifyBtn.textContent='Alerts Unavailable';return}notifyBtn.textContent=Notification.permission==='granted'?'Alerts On':'Enable Alerts'}
 notifyBtn.onclick=()=>enableNotifications().catch(e=>showNotice(e.message));
 
-if('serviceWorker'in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('service-worker.js?v=20260918-2');updateNotificationButton()}catch(e){showNotice('Could not start notifications on this device.')}})}
+if('serviceWorker'in navigator){window.addEventListener('load',async()=>{try{await navigator.serviceWorker.register('service-worker.js?v=20260918-3');updateNotificationButton()}catch(e){showNotice('Could not start notifications on this device.')}})}
 render();
 // Checklist category, color, editing and multi-reminder enhancements.
 (function(){
@@ -108,10 +108,110 @@ render();
   }
   addTask=pcSaveTask;document.getElementById('saveTask').onclick=pcSaveTask;taskInput.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey)pcSaveTask()};
 
+  let pcDragTaskId=null,pcTouchDrag=null;
+
+  function pcMoveTask(taskId,targetCategory,targetId=null,after=false){
+    const sourceIndex=tasks.findIndex(t=>t.id===taskId);if(sourceIndex<0)return;
+    const [task]=tasks.splice(sourceIndex,1);task.category=targetCategory;
+    if(targetId&&targetId!==taskId){
+      const targetIndex=tasks.findIndex(t=>t.id===targetId);
+      if(targetIndex>=0)tasks.splice(targetIndex+(after?1:0),0,task);else tasks.push(task);
+    }else{
+      let last=-1;
+      tasks.forEach((t,i)=>{if(!t.done&&t.period===activePeriod&&String(t.category).toLowerCase()===String(targetCategory).toLowerCase())last=i});
+      if(last>=0)tasks.splice(last+1,0,task);else tasks.push(task);
+    }
+    save();render();
+  }
+  function pcClearDropMarks(){
+    groups.querySelectorAll('.pc-drop-before,.pc-drop-after,.pc-group-drop').forEach(el=>el.classList.remove('pc-drop-before','pc-drop-after','pc-group-drop'));
+  }
+  function pcMarkDrop(row,after,group){
+    pcClearDropMarks();
+    if(row)row.classList.add(after?'pc-drop-after':'pc-drop-before');
+    else if(group)group.classList.add('pc-group-drop');
+  }
+  function pcFinishTouchDrag(cancel=false){
+    if(!pcTouchDrag)return;
+    const d=pcTouchDrag;
+    d.handle.releasePointerCapture?.(d.pointerId);
+    d.ghost?.remove();d.row?.classList.remove('pc-dragging');document.body.classList.remove('pc-touch-dragging');
+    if(!cancel&&d.targetCategory)pcMoveTask(d.taskId,d.targetCategory,d.targetId,d.after);
+    else pcClearDropMarks();
+    pcTouchDrag=null;
+  }
+  function pcBindDrag(){
+    const rows=[...groups.querySelectorAll('[data-pc-task]')],handles=[...groups.querySelectorAll('[data-pc-drag]')],cards=[...groups.querySelectorAll('[data-pc-category]')];
+
+    handles.forEach(handle=>{
+      handle.draggable=true;
+      handle.addEventListener('dragstart',e=>{
+        pcDragTaskId=handle.dataset.pcDrag;
+        const row=handle.closest('[data-pc-task]');row?.classList.add('pc-dragging');
+        e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',pcDragTaskId);
+      });
+      handle.addEventListener('dragend',()=>{pcDragTaskId=null;groups.querySelectorAll('.pc-dragging').forEach(x=>x.classList.remove('pc-dragging'));pcClearDropMarks()});
+      handle.addEventListener('pointerdown',e=>{
+        if(e.pointerType==='mouse')return;
+        const row=handle.closest('[data-pc-task]');if(!row)return;
+        e.preventDefault();handle.setPointerCapture?.(e.pointerId);
+        const rect=row.getBoundingClientRect(),ghost=document.createElement('div');
+        ghost.className='pc-drag-ghost';ghost.textContent=row.querySelector('.task-text')?.textContent||'Task';
+        ghost.style.width=rect.width+'px';ghost.style.left=rect.left+'px';ghost.style.top=(e.clientY-24)+'px';document.body.appendChild(ghost);
+        row.classList.add('pc-dragging');document.body.classList.add('pc-touch-dragging');
+        pcTouchDrag={taskId:handle.dataset.pcDrag,pointerId:e.pointerId,handle,row,ghost,targetCategory:null,targetId:null,after:false};
+      });
+      handle.addEventListener('pointermove',e=>{
+        if(!pcTouchDrag||pcTouchDrag.pointerId!==e.pointerId)return;
+        e.preventDefault();pcTouchDrag.ghost.style.top=(e.clientY-24)+'px';
+        const hit=document.elementFromPoint(e.clientX,e.clientY),row=hit?.closest?.('[data-pc-task]'),group=hit?.closest?.('[data-pc-category]');
+        if(!group){pcTouchDrag.targetCategory=null;pcClearDropMarks();return}
+        const category=decodeURIComponent(group.dataset.pcCategory);pcTouchDrag.targetCategory=category;
+        if(row&&row.dataset.pcTask!==pcTouchDrag.taskId){
+          const rect=row.getBoundingClientRect(),after=e.clientY>rect.top+rect.height/2;
+          pcTouchDrag.targetId=row.dataset.pcTask;pcTouchDrag.after=after;pcMarkDrop(row,after,null);
+        }else{
+          pcTouchDrag.targetId=null;pcTouchDrag.after=false;pcMarkDrop(null,false,group);
+        }
+      });
+      handle.addEventListener('pointerup',e=>{if(pcTouchDrag?.pointerId===e.pointerId)pcFinishTouchDrag(false)});
+      handle.addEventListener('pointercancel',e=>{if(pcTouchDrag?.pointerId===e.pointerId)pcFinishTouchDrag(true)});
+    });
+
+    rows.forEach(row=>{
+      row.addEventListener('dragover',e=>{
+        if(!pcDragTaskId||pcDragTaskId===row.dataset.pcTask)return;
+        e.preventDefault();e.stopPropagation();e.dataTransfer.dropEffect='move';
+        const rect=row.getBoundingClientRect(),after=e.clientY>rect.top+rect.height/2;
+        pcMarkDrop(row,after,null);
+      });
+      row.addEventListener('drop',e=>{
+        if(!pcDragTaskId||pcDragTaskId===row.dataset.pcTask)return;
+        e.preventDefault();e.stopPropagation();
+        const group=row.closest('[data-pc-category]'),rect=row.getBoundingClientRect(),after=e.clientY>rect.top+rect.height/2;
+        const id=pcDragTaskId;pcDragTaskId=null;pcMoveTask(id,decodeURIComponent(group.dataset.pcCategory),row.dataset.pcTask,after);
+      });
+    });
+    cards.forEach(group=>{
+      group.addEventListener('dragover',e=>{
+        if(!pcDragTaskId||e.target.closest('[data-pc-task]'))return;
+        e.preventDefault();e.dataTransfer.dropEffect='move';pcMarkDrop(null,false,group);
+      });
+      group.addEventListener('drop',e=>{
+        if(!pcDragTaskId||e.target.closest('[data-pc-task]'))return;
+        e.preventDefault();const id=pcDragTaskId;pcDragTaskId=null;pcMoveTask(id,decodeURIComponent(group.dataset.pcCategory));
+      });
+    });
+  }
+
   renderActive=function(){
     if(!pcCategories.length){groups.innerHTML=`<div class="empty"><strong>No categories yet.</strong>Use + Category at the top to make one.</div>`;return}
-    groups.innerHTML=pcCategories.map(cat=>{const items=tasks.filter(t=>!t.done&&t.period===activePeriod&&String(t.category).toLowerCase()===cat.toLowerCase());return `<section class="group"><div class="group-head"><h2>${esc(cat)}</h2><div class="pc-group-actions"><span class="group-count">${items.length} item${items.length===1?'':'s'}</span><button type="button" class="pc-category-add" data-pc-add="${pcAttr(cat)}" aria-label="Add item to ${esc(cat)}">+</button></div></div>${items.length?items.map(t=>`<div class="task pc-color-${PC_COLORS.has(t.color)?t.color:'none'}" data-pc-task="${t.id}" title="Double-click to edit"><label class="pc-check-wrap"><input type="checkbox" data-id="${t.id}"><span class="check"></span></label><span class="task-copy"><span class="task-text">${esc(t.text)}</span>${pcReminderLine(t)?`<span class="reminder">${pcReminderLine(t)}</span>`:''}</span><button type="button" class="pc-task-edit" data-pc-edit="${t.id}" aria-label="Edit ${esc(t.text)}">•••</button></div>`).join(''):`<div class="pc-empty-category">No items in ${esc(activePeriod.toLowerCase())}. Use + to add one.</div>`}</section>`}).join('');
-    groups.querySelectorAll('input[type="checkbox"]').forEach(b=>b.onchange=()=>completeTask(b.dataset.id));groups.querySelectorAll('[data-pc-add]').forEach(b=>b.onclick=()=>pcOpenTask(null,decodeURIComponent(b.dataset.pcAdd)));groups.querySelectorAll('[data-pc-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();pcOpenTask(b.dataset.pcEdit)});groups.querySelectorAll('[data-pc-task]').forEach(row=>row.ondblclick=e=>{if(!e.target.closest('.pc-check-wrap,.pc-task-edit'))pcOpenTask(row.dataset.pcTask)})
+    groups.innerHTML=pcCategories.map(cat=>{const items=tasks.filter(t=>!t.done&&t.period===activePeriod&&String(t.category).toLowerCase()===cat.toLowerCase());return `<section class="group" data-pc-category="${pcAttr(cat)}"><div class="group-head"><h2>${esc(cat)}</h2><div class="pc-group-actions"><span class="group-count">${items.length} item${items.length===1?'':'s'}</span><button type="button" class="pc-category-add" data-pc-add="${pcAttr(cat)}" aria-label="Add item to ${esc(cat)}">+</button></div></div>${items.length?items.map(t=>`<div class="task pc-color-${PC_COLORS.has(t.color)?t.color:'none'}" data-pc-task="${t.id}" title="Double-click to edit"><label class="pc-check-wrap"><input type="checkbox" data-id="${t.id}"><span class="check"></span></label><span class="task-copy"><span class="task-text">${esc(t.text)}</span>${pcReminderLine(t)?`<span class="reminder">${pcReminderLine(t)}</span>`:''}</span><button type="button" class="pc-drag-handle" data-pc-drag="${t.id}" aria-label="Drag ${esc(t.text)} to reorder">☰</button><button type="button" class="pc-task-edit" data-pc-edit="${t.id}" aria-label="Edit ${esc(t.text)}">•••</button></div>`).join(''):`<div class="pc-empty-category">No items in ${esc(activePeriod.toLowerCase())}. Drop a task here or use + to add one.</div>`}</section>`}).join('');
+    groups.querySelectorAll('input[type="checkbox"]').forEach(b=>b.onchange=()=>completeTask(b.dataset.id));
+    groups.querySelectorAll('[data-pc-add]').forEach(b=>b.onclick=()=>pcOpenTask(null,decodeURIComponent(b.dataset.pcAdd)));
+    groups.querySelectorAll('[data-pc-edit]').forEach(b=>b.onclick=e=>{e.stopPropagation();pcOpenTask(b.dataset.pcEdit)});
+    groups.querySelectorAll('[data-pc-task]').forEach(row=>row.ondblclick=e=>{if(!e.target.closest('.pc-check-wrap,.pc-task-edit,.pc-drag-handle'))pcOpenTask(row.dataset.pcTask)});
+    pcBindDrag();
   };
 
   pcAddCategoryBtn.onclick=()=>{const name=(prompt('New category name:')||'').trim();if(!name)return;if(pcCategories.some(x=>x.toLowerCase()===name.toLowerCase())){showNotice('That category already exists.');return}pcCategories.push(name);pcSaveCategories();showingArchive=false;render()};
